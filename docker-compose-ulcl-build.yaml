@@ -42,6 +42,8 @@ services:
       - "27017"
     volumes:
       - dbdata:/data/db
+    ports:
+      - "30000:27017"
     networks:
       privnet:
         aliases:
@@ -291,6 +293,17 @@ services:
       - free5gc-amf
       - free5gc-i-upf
       - free5gc-psa-upf
+
+  nf_test:
+    container_name: nf_test
+    image: curlimages/curl
+    command: sleep infinity
+    volumes:
+      - ../nf_test/:/home/curl_user/nf_test
+    networks:
+      privnet:
+        aliases:
+          - nf-test.free5gc.org
 
   #n3iwue:
   #  container_name: n3iwue

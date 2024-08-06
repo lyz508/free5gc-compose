@@ -13,3 +13,8 @@ ueRoutingInfo: # the list of UE routing information
         B: I-UPF
       - A: I-UPF
         B: PSA-UPF
+
+# mappingRouteProfileID and FrwardingPolicyID of UPF 
+routeProfile:
+  0:
+    forwardingPolicyID: "1"
