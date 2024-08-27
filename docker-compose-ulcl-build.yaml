@@ -34,6 +34,7 @@ services:
       privnet:
         aliases:
           - psa-upf.free5gc.org
+          
   db:
     container_name: mongodb
     image: mongo
@@ -163,7 +164,7 @@ services:
         DEBUG_TOOLS: "false"
     command: ./smf -c ./config/smfcfg.yaml -u ./config/uerouting.yaml
     expose:
-      - "8000"
+      - "8000"  
     volumes:
       - ./config/ULCL/smfcfg.yaml:/free5gc/config/smfcfg.yaml
       - ./config/ULCL/uerouting.yaml:/free5gc/config/uerouting.yaml
@@ -277,7 +278,8 @@ services:
   ueransim:
     container_name: ueransim
     image: free5gc/ueransim:latest
-    command: ./nr-gnb -c ./config/gnbcfg.yaml
+    # command: ./nr-gnb -c ./config/gnbcfg.yaml
+    command: sleep infinity
     volumes:
       - ./config/gnbcfg.yaml:/ueransim/config/gnbcfg.yaml
       - ./config/uecfg-ulcl.yaml:/ueransim/config/uecfg.yaml
@@ -299,7 +301,7 @@ services:
     image: curlimages/curl
     command: sleep infinity
     volumes:
-      - ../nf_test/:/home/curl_user/nf_test
+      - ./nf_test/:/home/curl_user/nf_test
     networks:
       privnet:
         aliases:
