@@ -40,6 +40,8 @@ services:
     command: mongod --port 27017 --quiet
     expose:
       - "27017"
+    ports:
+      - "30000:27017"
     volumes:
       - dbdata:/data/db
     networks:
@@ -87,6 +89,7 @@ services:
       privnet:
         aliases:
           - amf.free5gc.org
+        ipv4_address: 10.100.200.18 
     depends_on:
       - free5gc-nrf
 
@@ -297,7 +300,8 @@ services:
   ueransim:
     container_name: ueransim
     image: free5gc/ueransim:latest
-    command: ./nr-gnb -c ./config/gnbcfg.yaml
+    # command: ./nr-gnb -c ./config/gnbcfg.yaml
+    command: tail -f /dev/null
     volumes:
       - ./config/gnbcfg.yaml:/ueransim/config/gnbcfg.yaml
       - ./config/uecfg-ulcl.yaml:/ueransim/config/uecfg.yaml
@@ -313,6 +317,31 @@ services:
       - free5gc-amf
       - free5gc-i-upf
       - free5gc-psa-upf
+
+  ci-test: # packet rusher
+    container_name: ci
+    build:
+      context: ./ci
+      args:
+        DEBUG_TOOLS: "false"
+    command: tail -f /dev/null
+    volumes:
+      - ./config/ci.yaml:/root/PacketRusher/config/config.yml
+      - ./test:/root/test
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - "/dev/net/tun"
+    networks:
+      privnet:
+        aliases:
+          - ci.free5gc.org
+        ipv4_address: 10.100.200.100
+    depends_on:
+      - free5gc-amf
+      - free5gc-i-upf
+      - free5gc-psa-upf
+
 
   #n3iwue:
   #  container_name: n3iwue
